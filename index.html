@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OrbiCrm — CRM для малого бизнеса</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1A2C3E;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary-dark: #0B2B40;
+            --primary: #1A5F7A;
+            --primary-light: #2C8BB3;
+            --accent: #F4A261;
+            --accent-dark: #E76F51;
+            --gray-bg: #F9FAFB;
+            --gray-border: #E5E7EB;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --white: #ffffff;
+            --shadow-sm: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --radius-lg: 1.5rem;
+            --radius-md: 1rem;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--gray-border);
+            background: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: #f0f9ff;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--text-dark);
+        }
+
+        .btn-accent:hover {
+            background: var(--accent-dark);
+            color: white;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 4rem 0 5rem;
+            background: linear-gradient(145deg, #ffffff 0%, #F4F9FC 100%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-sub {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .hero-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .hero-form input {
+            flex: 1;
+            padding: 0.875rem 1.25rem;
+            border: 1px solid var(--gray-border);
+            border-radius: 2rem;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .hero-form input:focus {
+            border-color: var(--primary);
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            background: #eef2ff;
+        }
+
+        /* Section */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+        }
+
+        /* Benefits */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .benefit-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-border);
+            transition: transform 0.2s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Steps */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .step {
+            background: var(--gray-bg);
+            padding: 2rem 1rem;
+            border-radius: var(--radius-md);
+        }
+
+        .step-num {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            color: white;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--gray-border);
+            transition: all 0.2s;
+        }
+
+        .feature-item:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Integrations */
+        .integrations {
+            background: var(--gray-bg);
+            text-align: center;
+        }
+
+        .logo-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .logo-cloud span {
+            background: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--gray-border);
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .pricing-card.popular {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+            transform: scale(1.02);
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+
+        .price small {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .pricing-btn {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial {
+            background: var(--gray-bg);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            font-style: normal;
+        }
+
+        .testimonial p {
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .author {
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        /* CTA */
+        .cta {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            text-align: center;
+            border-radius: var(--radius-lg);
+            margin: 3rem 1.5rem;
+            padding: 4rem 2rem;
+        }
+
+        .cta .btn-primary {
+            background: white;
+            color: var(--primary-dark);
+            margin-top: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: #cbd5e1;
+            padding: 3rem 0;
+        }
+
+        .footer a {
+            color: #cbd5e1;
+            text-decoration: none;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        /* Burger menu (mobile) */
+        .menu-icon {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-icon span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: white;
+                padding: 1rem 0;
+                gap: 1rem;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .menu-icon {
+                display: flex;
+            }
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+            .hero-form {
+                justify-content: center;
+            }
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+        }
+
+        button {
+            background: none;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="nav">
+            <div class="logo">OrbiCrm</div>
+            <div class="menu-icon" id="menuToggle">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#features">Возможности</a>
+                <a href="#pricing">Тарифы</a>
+                <a href="#reviews">Отзывы</a>
+                <a href="#" class="btn-outline">Вход</a>
+                <a href="#demo" class="btn-primary" style="padding:0.5rem 1.25rem">Начать 14 дней</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div>
+                <h1 class="hero-title">OrbiCrm — CRM, которая вращается вокруг вашего бизнеса</h1>
+                <p class="hero-sub">Простая система для учёта клиентов, сделок и задач. Быстрый старт за 5 минут.</p>
+                <form class="hero-form" id="demoForm">
+                    <input type="email" placeholder="Email" required>
+                    <input type="tel" placeholder="Телефон">
+                    <button type="submit" class="btn-primary">Попробовать бесплатно</button>
+                </form>
+                <p style="font-size:0.8rem; margin-top:1rem; color:var(--text-light)">14 дней без карты, отмена в один клик</p>
+            </div>
+            <div class="hero-image">
+                <img src="https://placehold.co/600x400/1A5F7A/white?text=OrbiCrm+Dashboard" alt="Панель управления OrbiCrm">
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Почему OrbiCrm?</h2>
+            <p class="section-sub">Всё для автоматизации малого бизнеса без лишних сложностей</p>
+            <div class="benefits-grid">
+                <div class="benefit-card"><div class="benefit-icon">📋</div><h3>Единая база клиентов</h3><p>Вся история общения, документы и финансы в одном месте.</p></div>
+                <div class="benefit-card"><div class="benefit-icon">🧠</div><h3>Интуитивно понятно</h3><p>Сотрудники разберутся без обучения.</p></div>
+                <div class="benefit-card"><div class="benefit-icon">📱</div><h3>Мобильный доступ</h3><p>Полноценное приложение для iOS и Android.</p></div>
+                <div class="benefit-card"><div class="benefit-icon">💰</div><h3>Без скрытых платежей</h3><p>Фиксированная цена без доплат за пользователей.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" style="background: var(--gray-bg);">
+        <div class="container">
+            <h2 class="section-title">Как это работает</h2>
+            <div class="steps-grid">
+                <div class="step"><div class="step-num">1</div><h3>Регистрация</h3><p>Заполните форму за 1 минуту</p></div>
+                <div class="step"><div class="step-num">2</div><h3>Импорт клиентов</h3><p>Из Excel, Google-таблиц или вручную</p></div>
+                <div class="step"><div class="step-num">3</div><h3>Задачи & сделки</h3><p>Планируйте звонки, встречи, рассылки</p></div>
+                <div class="step"><div class="step-num">4</div><h3>Аналитика</h3><p>Воронка продаж, доходность</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+        <div class="container">
+            <h2 class="section-title">Все возможности для роста</h2>
+            <div class="features-grid">
+                <div class="feature-item"><div class="feature-icon">📈</div><h3>Воронка продаж</h3><p>Визуальное перемещение сделок по этапам.</p></div>
+                <div class="feature-item"><div class="feature-icon">👥</div><h3>База клиентов</h3><p>Карточки с контактами, историей, файлами.</p></div>
+                <div class="feature-item"><div class="feature-icon">✅</div><h3>Задачи и напоминания</h3><p>Планирование, уведомления в Telegram/почту.</p></div>
+                <div class="feature-item"><div class="feature-icon">📄</div><h3>Счета и оплаты</h3><p>Выставление счетов, контроль оплат.</p></div>
+                <div class="feature-item"><div class="feature-icon">📊</div><h3>Отчёты и дашборды</h3><p>Выручка, конверсия, активность менеджеров.</p></div>
+                <div class="feature-item"><div class="feature-icon">📧</div><h3>E-mail рассылки</h3><p>Шаблоны писем, статистика открытий.</p></div>
+                <div class="feature-item"><div class="feature-icon">📦</div><h3>Склад (опционально)</h3><p>Учёт товаров и остатков.</p></div>
+                <div class="feature-item"><div class="feature-icon">🔌</div><h3>API + Интеграции</h3><p>Синхронизация с 1С, Telegram, WhatsApp.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integrations -->
+    <section class="integrations section">
+        <div class="container">
+            <h2 class="section-title">Интеграции с любимыми сервисами</h2>
+            <div class="logo-cloud">
+                <span>Telegram</span><span>WhatsApp</span><span>1С</span><span>Google Диск</span><span>Excel / CSV</span><span>REST API</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Простые тарифы</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Базовый</h3>
+                    <div class="price">0 ₽ <small>/мес</small></div>
+                    <ul style="list-style:none; margin:1rem 0; text-align:left;">
+                        <li>✓ До 3 пользователей</li>
+                        <li>✓ До 500 клиентов</li>
+                        <li>✓ Воронка продаж</li>
+                        <li>✓ Задачи</li>
+                        <li>✗ Интеграции</li>
+                    </ul>
+                    <button class="btn-primary pricing-btn">Выбрать</button>
+                </div>
+                <div class="pricing-card popular">
+                    <h3>Бизнес</h3>
+                    <div class="price">990 ₽ <small>/мес</small></div>
+                    <ul style="list-style:none; margin:1rem 0; text-align:left;">
+                        <li>✓ Безлимит пользователей</li>
+                        <li>✓ Безлимит клиентов</li>
+                        <li>✓ Расширенные отчёты</li>
+                        <li>✓ Telegram/WhatsApp интеграции</li>
+                        <li>✓ Приоритетная поддержка</li>
+                    </ul>
+                    <button class="btn-primary pricing-btn">Попробовать</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Профи</h3>
+                    <div class="price">1 990 ₽ <small>/мес</small></div>
+                    <ul style="list-style:none; margin:1rem 0; text-align:left;">
+                        <li>✓ Всё из Бизнес</li>
+                        <li>✓ API + Webhooks</li>
+                        <li>✓ SLA 24/7</li>
+                        <li>✓ Персональный менеджер</li>
+                        <li>✓ Обучение персонала</li>
+                    </ul>
+                    <button class="btn-primary pricing-btn">Начать</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section" id="reviews" style="background: var(--gray-bg);">
+        <div class="container">
+            <h2 class="section-title">Клиенты говорят спасибо</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial"><p>«Внедрили за день, сразу увидели узкие места в продажах. OrbiCrm — магия для малого бизнеса.»</p><div class="author">Иван, Студия мебели</div></div>
+                <div class="testimonial"><p>«Очень удобная мобильная версия, всегда под рукой база. Советую всем коллегам.»</p><div class="author">Ольга, Агентство недвижимости</div></div>
+                <div class="testimonial"><p>«Лучшее соотношение цена/качество. API отличный, настроили под себя за день.»</p><div class="author">Антон, Розничный магазин</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="container" id="demo">
+        <div class="cta">
+            <h2 style="font-size:2rem;">Начните управлять бизнесом проще уже сегодня</h2>
+            <p style="margin-top:1rem;">14 дней полноценного доступа без ограничений. Без карты.</p>
+            <button class="btn-primary" id="ctaButton">Запросить демо-доступ</button>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div>
+            <div class="footer-logo">OrbiCrm</div>
+            <p style="margin-top:0.5rem;">Вращаем бизнес вокруг клиента.</p>
+        </div>
+        <div>
+            <h4>О компании</h4>
+            <p><a href="#">Блог</a></p>
+            <p><a href="#">Политика</a></p>
+        </div>
+        <div>
+            <h4>Контакты</h4>
+            <p>support@orbicrm.ru</p>
+            <p>+7 (999) 123-45-67</p>
+        </div>
+        <div>
+            <h4>Соцсети</h4>
+            <p>Telegram | VK | YouTube</p>
+        </div>
+    </div>
+    <div class="container" style="text-align:center; margin-top:2rem; font-size:0.8rem;">
+        © 2026 OrbiCrm. Все права защищены.
+    </div>
+</footer>
+
+<script>
+    // Мобильное меню
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+
+    // Демо-формы (просто уведомление)
+    const forms = document.querySelectorAll('#demoForm, #ctaButton');
+    forms.forEach(form => {
+        form.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Спасибо за интерес! Демо-доступ будет открыт в ближайшее время. (Демо-режим)');
+        });
+    });
+    // Обработка кнопок выбора тарифов
+    document.querySelectorAll('.pricing-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('Форма регистрации на тариф. Нажмите "Начать 14 дней" в шапке.');
+        });
+    });
+</script>
+</body>
+</html>
