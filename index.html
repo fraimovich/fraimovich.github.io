@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>OrbiCrm — CRM для малого бизнеса</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- CryptoJS для хеширования паролей (Client-Side Encryption) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -543,6 +545,23 @@
             background: none;
             border: none;
         }
+
+        /* Стили для авторизованного пользователя */
+        .user-greeting {
+            font-weight: 500;
+            color: var(--primary);
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            font-weight: 500;
+            margin-left: 1rem;
+        }
+        .logout-btn:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -558,7 +577,9 @@
                 <a href="#features">Возможности</a>
                 <a href="#pricing">Тарифы</a>
                 <a href="#reviews">Отзывы</a>
-                <a id="loginBtn" class="btn-outline">Вход/Регистрация</a>
+                <div id="authSection" style="display: flex; align-items: center; gap: 1rem;">
+                    <a id="loginBtn" class="btn-outline">Вход/Регистрация</a>
+                </div>
                 <a href="#demo" class="btn-primary" style="padding:0.5rem 1.25rem">Начать 14 дней</a>
             </div>
         </div>
@@ -761,24 +782,104 @@
 </div>
 
 <script>
-    // Мобильное меню
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
+    // ---------- Client-Side Encryption (SHA-256) ----------
+    // Хранилище пользователей: объект в localStorage
+    const STORAGE_KEY = 'orbicrm_users';
+    const SESSION_KEY = 'orbicrm_logged_in';
 
-    // Модальное окно
+    // Загрузка списка пользователей
+    function loadUsers() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) return JSON.parse(data);
+        return {}; // { "логин": { email: "email", passwordHash: "hash" } }
+    }
+
+    // Сохранение списка пользователей
+    function saveUsers(users) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+    }
+
+    // Хеширование пароля (SHA-256)
+    function hashPassword(password) {
+        return CryptoJS.SHA256(password).toString();
+    }
+
+    // Регистрация нового пользователя
+    function register(login, email, password) {
+        const users = loadUsers();
+        if (users[login]) {
+            return { success: false, message: 'Пользователь с таким логином уже существует.' };
+        }
+        if (password.length < 6) {
+            return { success: false, message: 'Пароль должен быть не менее 6 символов.' };
+        }
+        users[login] = {
+            email: email,
+            passwordHash: hashPassword(password)
+        };
+        saveUsers(users);
+        return { success: true, message: 'Регистрация успешна! Выполняется вход...' };
+    }
+
+    // Вход пользователя
+    function login(login, password) {
+        const users = loadUsers();
+        const user = users[login];
+        if (!user) {
+            return { success: false, message: 'Неверный логин или пароль.' };
+        }
+        const hash = hashPassword(password);
+        if (user.passwordHash === hash) {
+            localStorage.setItem(SESSION_KEY, login);
+            return { success: true, message: 'Вход выполнен!' };
+        } else {
+            return { success: false, message: 'Неверный логин или пароль.' };
+        }
+    }
+
+    // Выход
+    function logout() {
+        localStorage.removeItem(SESSION_KEY);
+        updateUIByAuth();
+        // закрываем модалку если открыта
+        closeModal();
+        // показываем сообщение
+        alert('Вы вышли из системы.');
+    }
+
+    // Текущий авторизованный пользователь
+    function getCurrentUser() {
+        return localStorage.getItem(SESSION_KEY);
+    }
+
+    // Обновление интерфейса в зависимости от авторизации
+    function updateUIByAuth() {
+        const currentUser = getCurrentUser();
+        const authSection = document.getElementById('authSection');
+        const loginBtn = document.getElementById('loginBtn');
+        if (!authSection) return;
+
+        if (currentUser) {
+            // Пользователь вошёл
+            authSection.innerHTML = `
+                <span class="user-greeting">Привет, ${currentUser}</span>
+                <button id="logoutBtn" class="logout-btn">Выйти</button>
+            `;
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) logoutBtn.addEventListener('click', logout);
+        } else {
+            // Не авторизован
+            authSection.innerHTML = `<a id="loginBtn" class="btn-outline">Вход/Регистрация</a>`;
+            const newLoginBtn = document.getElementById('loginBtn');
+            if (newLoginBtn) newLoginBtn.addEventListener('click', openModal);
+        }
+    }
+
+    // ---------- Модальное окно ----------
     const modal = document.getElementById('authModal');
-    const loginBtn = document.getElementById('loginBtn');
     const closeBtn = document.querySelector('.close');
-
     function openModal() { modal.style.display = 'flex'; }
     function closeModal() { modal.style.display = 'none'; }
-
-    if (loginBtn) loginBtn.addEventListener('click', openModal);
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
     // Переключение вкладок
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -793,62 +894,104 @@
         });
     });
 
-    // AJAX отправка форм
-    async function sendForm(url, formData, msgContainer) {
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(formData), method: 'GET'
-            });
-            const result = await response.json();
-            if (result.success) {
-                msgContainer.style.color = 'green';
-                msgContainer.innerText = result.message;
-                if (result.redirect) setTimeout(() => location.href = result.redirect, 1000);
-                else setTimeout(() => closeModal(), 1500);
-            } else {
-                msgContainer.style.color = 'red';
-                msgContainer.innerText = result.message;
-            }
-        } catch(err) {
-            msgContainer.style.color = 'red';
-            msgContainer.innerText = 'Ошибка соединения. Проверьте интернет.';
-        }
-    }
-
-    const loginForm = document.getElementById('loginForm');
+    // Обработка формы регистрации
     const registerForm = document.getElementById('registerForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(loginForm);
-            const msg = loginForm.querySelector('.msg');
-            msg.innerText = '';
-            sendForm('/login.php', formData, msg);
-        });
-    }
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const formData = new FormData(registerForm);
-            const msg = registerForm.querySelector('.msg');
-            msg.innerText = '';
-            sendForm('/register.php', formData, msg);
+            const login = registerForm.querySelector('[name="login"]').value.trim();
+            const email = registerForm.querySelector('[name="email"]').value.trim();
+            const password = registerForm.querySelector('[name="pass"]').value;
+            const msgDiv = registerForm.querySelector('.msg');
+
+            if (!login || !email || !password) {
+                msgDiv.innerText = 'Заполните все поля.';
+                return;
+            }
+
+            const result = register(login, email, password);
+            msgDiv.innerText = result.message;
+            if (result.success) {
+                // Автоматически логиним после регистрации
+                const loginResult = login(login, password);
+                if (loginResult.success) {
+                    updateUIByAuth();
+                    setTimeout(() => {
+                        closeModal();
+                        // Сбрасываем формы
+                        registerForm.reset();
+                        loginForm.reset();
+                        msgDiv.innerText = '';
+                    }, 1500);
+                } else {
+                    msgDiv.innerText = 'Ошибка автоматического входа.';
+                }
+            } else {
+                msgDiv.style.color = 'red';
+            }
         });
     }
 
-    // Остальные демо-формы
+    // Обработка формы входа
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const login = loginForm.querySelector('[name="login"]').value.trim();
+            const password = loginForm.querySelector('[name="pass"]').value;
+            const msgDiv = loginForm.querySelector('.msg');
+
+            if (!login || !password) {
+                msgDiv.innerText = 'Введите логин и пароль.';
+                return;
+            }
+
+            const result = login(login, password);
+            msgDiv.innerText = result.message;
+            if (result.success) {
+                updateUIByAuth();
+                setTimeout(() => {
+                    closeModal();
+                    loginForm.reset();
+                    msgDiv.innerText = '';
+                }, 1000);
+            } else {
+                msgDiv.style.color = 'red';
+            }
+        });
+    }
+
+    // ---------- Остальные демо-формы и мобильное меню ----------
+    // Мобильное меню
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinksElem = document.getElementById('navLinks');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            navLinksElem.classList.toggle('active');
+        });
+    }
+
+    // Инициализация интерфейса и обработчиков кнопки входа
+    function initAuth() {
+        updateUIByAuth();
+        // Привязываем обработчик открытия модального окна (если кнопка создана динамически)
+        const loginBtnElement = document.getElementById('loginBtn');
+        if (loginBtnElement) loginBtnElement.addEventListener('click', openModal);
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    }
+
+    // Демо-формы
     const demoForm = document.getElementById('demoForm');
-    const ctaBtn = document.getElementById('ctaButton');
+    const ctaButton = document.getElementById('ctaButton');
     if (demoForm) {
         demoForm.addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Спасибо за интерес! Демо-доступ будет открыт в ближайшее время. (Демо-режим)');
         });
     }
-    if (ctaBtn) {
-        ctaBtn.addEventListener('click', () => {
+    if (ctaButton) {
+        ctaButton.addEventListener('click', () => {
             alert('Спасибо за интерес! Демо-доступ будет открыт в ближайшее время.');
         });
     }
@@ -857,6 +1000,9 @@
             alert('Форма регистрации на тариф. Нажмите "Начать 14 дней" в шапке.');
         });
     });
+
+    // Запуск
+    initAuth();
 </script>
 </body>
 </html>
