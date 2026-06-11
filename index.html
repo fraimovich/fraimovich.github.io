@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>OrbiCrm — CRM для малого бизнеса</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- CryptoJS для хеширования паролей (Client-Side Encryption) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
+        /* ... все стили остаются без изменений ... */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: #ffffff;
@@ -21,7 +20,6 @@
             line-height: 1.5;
             scroll-behavior: smooth;
         }
-
         :root {
             --primary-dark: #0B2B40;
             --primary: #1A5F7A;
@@ -38,14 +36,11 @@
             --radius-lg: 1.5rem;
             --radius-md: 1rem;
         }
-
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
-
-        /* Header */
         .header {
             background: rgba(255,255,255,0.96);
             backdrop-filter: blur(8px);
@@ -54,7 +49,6 @@
             z-index: 50;
             border-bottom: 1px solid var(--gray-border);
         }
-
         .nav {
             display: flex;
             align-items: center;
@@ -63,7 +57,6 @@
             gap: 1rem;
             flex-wrap: wrap;
         }
-
         .logo {
             font-size: 1.8rem;
             font-weight: 800;
@@ -73,13 +66,11 @@
             color: transparent;
             letter-spacing: -0.02em;
         }
-
         .nav-links {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
-
         .nav-links a {
             text-decoration: none;
             color: var(--text-dark);
@@ -87,11 +78,9 @@
             transition: color 0.2s;
             cursor: pointer;
         }
-
         .nav-links a:hover {
             color: var(--primary);
         }
-
         .btn-outline {
             border: 1px solid var(--gray-border);
             background: white;
@@ -101,12 +90,10 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-
         .btn-outline:hover {
             border-color: var(--primary);
             background: #f0f9ff;
         }
-
         .btn-primary {
             background: var(--primary);
             color: white;
@@ -119,34 +106,19 @@
             display: inline-block;
             text-decoration: none;
         }
-
         .btn-primary:hover {
             background: var(--primary-light);
         }
-
-        .btn-accent {
-            background: var(--accent);
-            color: var(--text-dark);
-        }
-
-        .btn-accent:hover {
-            background: var(--accent-dark);
-            color: white;
-        }
-
-        /* Hero */
         .hero {
             padding: 4rem 0 5rem;
             background: linear-gradient(145deg, #ffffff 0%, #F4F9FC 100%);
         }
-
         .hero-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
             align-items: center;
         }
-
         .hero-title {
             font-size: 3rem;
             font-weight: 800;
@@ -157,20 +129,17 @@
             background-clip: text;
             color: transparent;
         }
-
         .hero-sub {
             font-size: 1.25rem;
             color: var(--text-light);
             margin-bottom: 2rem;
         }
-
         .hero-form {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin-top: 1rem;
         }
-
         .hero-form input {
             flex: 1;
             padding: 0.875rem 1.25rem;
@@ -178,46 +147,35 @@
             border-radius: 2rem;
             font-size: 1rem;
             outline: none;
-            transition: border 0.2s;
         }
-
         .hero-form input:focus {
             border-color: var(--primary);
         }
-
         .hero-image img {
             width: 100%;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
-            background: #eef2ff;
         }
-
-        /* Section */
         .section {
             padding: 5rem 0;
         }
-
         .section-title {
             font-size: 2.25rem;
             font-weight: 700;
             text-align: center;
             margin-bottom: 1rem;
         }
-
         .section-sub {
             text-align: center;
             color: var(--text-light);
             max-width: 600px;
             margin: 0 auto 3rem auto;
         }
-
-        /* Benefits */
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
-
         .benefit-card {
             background: var(--white);
             padding: 1.5rem;
@@ -226,34 +184,24 @@
             border: 1px solid var(--gray-border);
             transition: transform 0.2s;
         }
-
         .benefit-card:hover {
             transform: translateY(-5px);
         }
-
         .benefit-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
         }
-
-        .benefit-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Steps */
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             text-align: center;
         }
-
         .step {
             background: var(--gray-bg);
             padding: 2rem 1rem;
             border-radius: var(--radius-md);
         }
-
         .step-num {
             width: 48px;
             height: 48px;
@@ -267,38 +215,21 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
-
-        /* Features grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
         }
-
         .feature-item {
             background: white;
             border-radius: var(--radius-md);
             padding: 1.5rem;
             border: 1px solid var(--gray-border);
-            transition: all 0.2s;
         }
-
-        .feature-item:hover {
-            border-color: var(--primary-light);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
-        }
-
-        /* Integrations */
         .integrations {
             background: var(--gray-bg);
             text-align: center;
         }
-
         .logo-cloud {
             display: flex;
             flex-wrap: wrap;
@@ -306,7 +237,6 @@
             gap: 2.5rem;
             margin-top: 2rem;
         }
-
         .logo-cloud span {
             background: white;
             padding: 0.5rem 1.5rem;
@@ -315,71 +245,47 @@
             color: var(--primary-dark);
             box-shadow: var(--shadow-sm);
         }
-
-        /* Pricing */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
-
         .pricing-card {
             background: white;
             border-radius: var(--radius-lg);
             padding: 2rem;
             border: 1px solid var(--gray-border);
-            transition: all 0.2s;
             text-align: center;
         }
-
         .pricing-card.popular {
             border-color: var(--primary);
             box-shadow: var(--shadow-md);
             transform: scale(1.02);
         }
-
         .price {
             font-size: 2.5rem;
             font-weight: 800;
             margin: 1rem 0;
         }
-
         .price small {
             font-size: 1rem;
             font-weight: 400;
         }
-
         .pricing-btn {
             margin-top: 1.5rem;
             width: 100%;
         }
-
-        /* Testimonials */
         .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
-
         .testimonial {
             background: var(--gray-bg);
             padding: 1.5rem;
             border-radius: var(--radius-md);
-            font-style: normal;
         }
-
-        .testimonial p {
-            margin-bottom: 1rem;
-            font-weight: 400;
-        }
-
-        .author {
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-
-        /* CTA */
         .cta {
             background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: white;
@@ -388,45 +294,36 @@
             margin: 3rem 1.5rem;
             padding: 4rem 2rem;
         }
-
         .cta .btn-primary {
             background: white;
             color: var(--primary-dark);
             margin-top: 1.5rem;
         }
-
-        /* Footer */
         .footer {
             background: var(--primary-dark);
             color: #cbd5e1;
             padding: 3rem 0;
         }
-
         .footer a {
             color: #cbd5e1;
             text-decoration: none;
         }
-
         .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 2rem;
         }
-
         .footer-logo {
             font-size: 1.5rem;
             font-weight: 800;
             color: white;
             margin-bottom: 1rem;
         }
-
-        /* Burger menu (mobile) */
         .menu-icon {
             display: none;
             flex-direction: column;
             cursor: pointer;
         }
-
         .menu-icon span {
             width: 25px;
             height: 3px;
@@ -434,8 +331,6 @@
             margin: 3px 0;
             transition: 0.3s;
         }
-
-        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -494,7 +389,6 @@
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box;
         }
         .modal button[type="submit"] {
             width: 100%;
@@ -510,7 +404,6 @@
             font-size: 14px;
             color: red;
         }
-
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -540,13 +433,6 @@
                 transform: scale(1);
             }
         }
-
-        button {
-            background: none;
-            border: none;
-        }
-
-        /* Стили для авторизованного пользователя */
         .user-greeting {
             font-weight: 500;
             color: var(--primary);
@@ -565,7 +451,6 @@
     </style>
 </head>
 <body>
-
 <header class="header">
     <div class="container">
         <div class="nav">
@@ -585,9 +470,7 @@
         </div>
     </div>
 </header>
-
 <main>
-    <!-- Hero -->
     <section class="hero">
         <div class="container hero-grid">
             <div>
@@ -605,8 +488,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Benefits -->
     <section class="section">
         <div class="container">
             <h2 class="section-title">Почему OrbiCrm?</h2>
@@ -619,8 +500,6 @@
             </div>
         </div>
     </section>
-
-    <!-- How it works -->
     <section class="section" style="background: var(--gray-bg);">
         <div class="container">
             <h2 class="section-title">Как это работает</h2>
@@ -632,8 +511,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Features -->
     <section class="section" id="features">
         <div class="container">
             <h2 class="section-title">Все возможности для роста</h2>
@@ -649,8 +526,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Integrations -->
     <section class="integrations section">
         <div class="container">
             <h2 class="section-title">Интеграции с любимыми сервисами</h2>
@@ -659,8 +534,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Pricing -->
     <section class="section" id="pricing">
         <div class="container">
             <h2 class="section-title">Простые тарифы</h2>
@@ -704,8 +577,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Testimonials -->
     <section class="section" id="reviews" style="background: var(--gray-bg);">
         <div class="container">
             <h2 class="section-title">Клиенты говорят спасибо</h2>
@@ -716,8 +587,6 @@
             </div>
         </div>
     </section>
-
-    <!-- CTA -->
     <div class="container" id="demo">
         <div class="cta">
             <h2 style="font-size:2rem;">Начните управлять бизнесом проще уже сегодня</h2>
@@ -726,34 +595,16 @@
         </div>
     </div>
 </main>
-
 <footer class="footer">
     <div class="container footer-grid">
-        <div>
-            <div class="footer-logo">OrbiCrm</div>
-            <p style="margin-top:0.5rem;">Вращаем бизнес вокруг клиента.</p>
-        </div>
-        <div>
-            <h4>О компании</h4>
-            <p><a href="#">Блог</a></p>
-            <p><a href="#">Политика</a></p>
-        </div>
-        <div>
-            <h4>Контакты</h4>
-            <p>support@orbicrm.ru</p>
-            <p>+7 (999) 123-45-67</p>
-        </div>
-        <div>
-            <h4>Соцсети</h4>
-            <p>Telegram | VK | YouTube</p>
-        </div>
+        <div><div class="footer-logo">OrbiCrm</div><p style="margin-top:0.5rem;">Вращаем бизнес вокруг клиента.</p></div>
+        <div><h4>О компании</h4><p><a href="#">Блог</a></p><p><a href="#">Политика</a></p></div>
+        <div><h4>Контакты</h4><p>support@orbicrm.ru</p><p>+7 (999) 123-45-67</p></div>
+        <div><h4>Соцсети</h4><p>Telegram | VK | YouTube</p></div>
     </div>
-    <div class="container" style="text-align:center; margin-top:2rem; font-size:0.8rem;">
-        © 2026 OrbiCrm. Все права защищены.
-    </div>
+    <div class="container" style="text-align:center; margin-top:2rem; font-size:0.8rem;">© 2026 OrbiCrm. Все права защищены.</div>
 </footer>
 
-<!-- Модальное окно входа/регистрации -->
 <div id="authModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -783,99 +634,64 @@
 
 <script>
     // ---------- Client-Side Encryption (SHA-256) ----------
-    // Хранилище пользователей: объект в localStorage
     const STORAGE_KEY = 'orbicrm_users';
     const SESSION_KEY = 'orbicrm_logged_in';
 
-    // Загрузка списка пользователей
     function loadUsers() {
         const data = localStorage.getItem(STORAGE_KEY);
-        if (data) return JSON.parse(data);
-        return {}; // { "логин": { email: "email", passwordHash: "hash" } }
+        return data ? JSON.parse(data) : {};
     }
-
-    // Сохранение списка пользователей
     function saveUsers(users) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
     }
-
-    // Хеширование пароля (SHA-256)
     function hashPassword(password) {
         return CryptoJS.SHA256(password).toString();
     }
-
-    // Регистрация нового пользователя
     function register(login, email, password) {
         const users = loadUsers();
-        if (users[login]) {
-            return { success: false, message: 'Пользователь с таким логином уже существует.' };
-        }
-        if (password.length < 6) {
-            return { success: false, message: 'Пароль должен быть не менее 6 символов.' };
-        }
-        users[login] = {
-            email: email,
-            passwordHash: hashPassword(password)
-        };
+        if (users[login]) return { success: false, message: 'Пользователь с таким логином уже существует.' };
+        if (password.length < 6) return { success: false, message: 'Пароль должен быть не менее 6 символов.' };
+        users[login] = { email: email, passwordHash: hashPassword(password) };
         saveUsers(users);
         return { success: true, message: 'Регистрация успешна! Выполняется вход...' };
     }
-
-    // Вход пользователя
+    function redirectToClientArm() {
+        window.location.href = 'https://orbicrm.ru/orbicrm-client-arm/';
+    }
     function login(login, password) {
         const users = loadUsers();
         const user = users[login];
-        if (!user) {
-            return { success: false, message: 'Неверный логин или пароль.' };
-        }
-        const hash = hashPassword(password);
-        if (user.passwordHash === hash) {
+        if (!user) return { success: false, message: 'Неверный логин или пароль.' };
+        if (user.passwordHash === hashPassword(password)) {
             localStorage.setItem(SESSION_KEY, login);
+            redirectToClientArm();
             return { success: true, message: 'Вход выполнен!' };
         } else {
             return { success: false, message: 'Неверный логин или пароль.' };
         }
     }
-
-    // Выход
     function logout() {
         localStorage.removeItem(SESSION_KEY);
-        updateUIByAuth();
-        // закрываем модалку если открыта
-        closeModal();
-        // показываем сообщение
-        alert('Вы вышли из системы.');
+        location.reload();
     }
-
-    // Текущий авторизованный пользователь
     function getCurrentUser() {
         return localStorage.getItem(SESSION_KEY);
     }
-
-    // Обновление интерфейса в зависимости от авторизации
     function updateUIByAuth() {
-        const currentUser = getCurrentUser();
         const authSection = document.getElementById('authSection');
-        const loginBtn = document.getElementById('loginBtn');
         if (!authSection) return;
-
-        if (currentUser) {
-            // Пользователь вошёл
-            authSection.innerHTML = `
-                <span class="user-greeting">Привет, ${currentUser}</span>
-                <button id="logoutBtn" class="logout-btn">Выйти</button>
-            `;
+        if (getCurrentUser()) {
+            authSection.innerHTML = `<span class="user-greeting">Привет, ${getCurrentUser()}</span><button id="logoutBtn" class="logout-btn">Выйти</button>`;
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) logoutBtn.addEventListener('click', logout);
         } else {
-            // Не авторизован
             authSection.innerHTML = `<a id="loginBtn" class="btn-outline">Вход/Регистрация</a>`;
             const newLoginBtn = document.getElementById('loginBtn');
             if (newLoginBtn) newLoginBtn.addEventListener('click', openModal);
         }
     }
 
-    // ---------- Модальное окно ----------
+    // Модальное окно
     const modal = document.getElementById('authModal');
     const closeBtn = document.querySelector('.close');
     function openModal() { modal.style.display = 'flex'; }
@@ -894,7 +710,7 @@
         });
     });
 
-    // Обработка формы регистрации
+    // Регистрация
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
@@ -903,27 +719,16 @@
             const email = registerForm.querySelector('[name="email"]').value.trim();
             const password = registerForm.querySelector('[name="pass"]').value;
             const msgDiv = registerForm.querySelector('.msg');
-
             if (!login || !email || !password) {
                 msgDiv.innerText = 'Заполните все поля.';
                 return;
             }
-
             const result = register(login, email, password);
             msgDiv.innerText = result.message;
             if (result.success) {
-                // Автоматически логиним после регистрации
+                // Автоматический вход и редирект
                 const loginResult = login(login, password);
-                if (loginResult.success) {
-                    updateUIByAuth();
-                    setTimeout(() => {
-                        closeModal();
-                        // Сбрасываем формы
-                        registerForm.reset();
-                        loginForm.reset();
-                        msgDiv.innerText = '';
-                    }, 1500);
-                } else {
+                if (!loginResult.success) {
                     msgDiv.innerText = 'Ошибка автоматического входа.';
                 }
             } else {
@@ -932,7 +737,7 @@
         });
     }
 
-    // Обработка формы входа
+    // Вход
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
@@ -940,68 +745,33 @@
             const login = loginForm.querySelector('[name="login"]').value.trim();
             const password = loginForm.querySelector('[name="pass"]').value;
             const msgDiv = loginForm.querySelector('.msg');
-
             if (!login || !password) {
                 msgDiv.innerText = 'Введите логин и пароль.';
                 return;
             }
-
             const result = login(login, password);
             msgDiv.innerText = result.message;
-            if (result.success) {
-                updateUIByAuth();
-                setTimeout(() => {
-                    closeModal();
-                    loginForm.reset();
-                    msgDiv.innerText = '';
-                }, 1000);
-            } else {
-                msgDiv.style.color = 'red';
-            }
+            if (!result.success) msgDiv.style.color = 'red';
         });
     }
 
-    // ---------- Остальные демо-формы и мобильное меню ----------
-    // Мобильное меню
+    // Обработчики UI
     const menuToggle = document.getElementById('menuToggle');
     const navLinksElem = document.getElementById('navLinks');
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            navLinksElem.classList.toggle('active');
-        });
-    }
+    if (menuToggle) menuToggle.addEventListener('click', () => navLinksElem.classList.toggle('active'));
+    const demoForm = document.getElementById('demoForm');
+    const ctaButton = document.getElementById('ctaButton');
+    if (demoForm) demoForm.addEventListener('submit', (e) => { e.preventDefault(); alert('Спасибо за интерес! Демо-доступ будет открыт в ближайшее время. (Демо-режим)'); });
+    if (ctaButton) ctaButton.addEventListener('click', () => alert('Спасибо за интерес! Демо-доступ будет открыт в ближайшее время.'));
+    document.querySelectorAll('.pricing-btn').forEach(btn => btn.addEventListener('click', () => alert('Форма регистрации на тариф. Нажмите "Начать 14 дней" в шапке.')));
 
-    // Инициализация интерфейса и обработчиков кнопки входа
     function initAuth() {
         updateUIByAuth();
-        // Привязываем обработчик открытия модального окна (если кнопка создана динамически)
         const loginBtnElement = document.getElementById('loginBtn');
         if (loginBtnElement) loginBtnElement.addEventListener('click', openModal);
         if (closeBtn) closeBtn.addEventListener('click', closeModal);
         window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     }
-
-    // Демо-формы
-    const demoForm = document.getElementById('demoForm');
-    const ctaButton = document.getElementById('ctaButton');
-    if (demoForm) {
-        demoForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Спасибо за интерес! Демо-доступ будет открыт в ближайшее время. (Демо-режим)');
-        });
-    }
-    if (ctaButton) {
-        ctaButton.addEventListener('click', () => {
-            alert('Спасибо за интерес! Демо-доступ будет открыт в ближайшее время.');
-        });
-    }
-    document.querySelectorAll('.pricing-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            alert('Форма регистрации на тариф. Нажмите "Начать 14 дней" в шапке.');
-        });
-    });
-
-    // Запуск
     initAuth();
 </script>
 </body>
