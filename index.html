@@ -214,7 +214,7 @@
             const hashed = await hashPassword(password);
             users[login] = { email, passwordHash: hashed };
             saveUsers(users);
-            return { success: true, message: 'Регистрация успешна! Выполняется вход...' };
+            return { success: true, message: 'Регистрация успешна!' };
         }
 
         // Вход
